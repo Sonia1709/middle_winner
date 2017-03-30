@@ -1,6 +1,7 @@
 var rez_x = window.innerWidth - 20;
 var rez_y = window.innerHeight - 20;
 var players_speed = 10;
+var player_rotation_speed = 0;
 var game = new Phaser.Game(rez_x, rez_y, Phaser.AUTO);
 
 var GameState = {
@@ -51,45 +52,56 @@ var GameState = {
 
 	},
 	update: function(){
-		//this.player1.angle += 5;
-		createObstacle();
-		game.physics.arcade.overlap(this.player1, obstacles, collisionHandler);
+		this.player1.angle += player_rotation_speed;
+		this.player2.angle += player_rotation_speed;
+
+		//createObstacle();
+		//game.physics.arcade.overlap(this.player1, obstacles, collisionHandler);
 
 		this.background.tilePosition.y += 3;
 
-		if(this.player1_keys.left.isDown){
-			this.player1.position.x -= players_speed;
-		}
+		// move players by pressing the keys
+		playerKeyPressHandler(this.player1, this.player1_keys);
+		playerKeyPressHandler(this.player2, this.player2_keys);
 
-		if(this.player1_keys.right.isDown){
-			this.player1.position.x += players_speed;
-		}
-
-		if(this.player1_keys.up.isDown){
-			this.player1.position.y -= players_speed;
-		}
-
-		if(this.player1_keys.down.isDown){
-			this.player1.position.y += players_speed;
-		}
-
-		if(this.player2_keys.left.isDown){
-			this.player2.position.x -= players_speed;
-		}
-
-		if(this.player2_keys.right.isDown){
-			this.player2.position.x += players_speed;
-		}
-
-		if(this.player2_keys.up.isDown){
-			this.player2.position.y -= players_speed;
-		}
-
-		if(this.player2_keys.down.isDown){
-			this.player2.position.y += players_speed;
-		}
+		// out-of-bounds fix
+		outOfBoundsBlock(this.player1);
+		outOfBoundsBlock(this.player2);
 	}
 };
+
+function playerKeyPressHandler(player, player_keys){
+	if(player_keys.left.isDown){
+			player.position.x -= players_speed;
+		}
+
+		if(player_keys.right.isDown){
+			player.position.x += players_speed;
+		}
+
+		if(player_keys.up.isDown){
+			player.position.y -= players_speed;
+		}
+
+		if(player_keys.down.isDown){
+			player.position.y += players_speed;
+		}
+}
+
+function outOfBoundsBlock(player){
+	if(player.position.x >= game.world.width){
+		player.position.x = game.world.width;
+	}
+	if(player.position.x <= 0){
+		player.position.x = 0;
+	}
+	if(player.position.y >= game.world.height){
+		player.position.y = game.world.height;
+	}
+	if(player.position.y <= 0){
+		player.position.y = 0;
+	}
+}
 
 function createObstacle(){
 	var obstacle = obstacles.getFirstExists(false);
