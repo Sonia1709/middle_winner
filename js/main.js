@@ -8,6 +8,7 @@ var GameState = {
 		this.load.image('background', 'assets/images/background2.jpg');
 		this.load.image('player1', 'assets/images/player1.png');
 		this.load.image('player2', 'assets/images/player2.png');
+		this.load.image('obstacle', 'assets/images/obstacle.png');
 	},
 	create: function(){
 		//this.background = this.game.add.sprite(0, 0, 'background');
@@ -31,10 +32,29 @@ var GameState = {
 																'right': Phaser.KeyCode.D }
 															);
 		
+		obstacles = game.add.group();
+		obstacles.enableBody = true;
+		obstacles.physicsBodyType = Phaser.Physics.ARCADE;
+		obstacles.createMultiple(10, 'obstacle');
+		obstacles.setAll('anchor.x', 0,5);
+		obstacles.setAll('anchor.y', 1);
+		obstacles.setAll('outOfBoundsKill', true);
+		obstacles.setAll('checkWorldBounds', true);
+
+		middle = game.add.group();
+		middle.enableBody = true;
+		middle.physicsBodyType = Phaser.Physics.ARCADE;
+
+		game.physics.enable(this.player1, Phaser.Physics.ARCADE);
+		game.physics.enable(this.player2, Phaser.Physics.ARCADE);
+
 
 	},
 	update: function(){
 		//this.player1.angle += 5;
+		createObstacle();
+		game.physics.arcade.overlap(this.player1, obstacles, collisionHandler);
+
 		this.background.tilePosition.y += 3;
 
 		if(this.player1_keys.left.isDown){
@@ -70,6 +90,18 @@ var GameState = {
 		}
 	}
 };
+
+function createObstacle(){
+	var obstacle = obstacles.getFirstExists(false);
+	if (obstacle){
+		obstacle.reset(500, 500);
+	}
+}
+
+function collisionHandler(player, object){
+	player.position.y = 1100;
+	object.position.y = 2000;
+}
 
 game.state.add('GameState', GameState);
 game.state.start('GameState');
