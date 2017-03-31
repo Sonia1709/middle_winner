@@ -52,12 +52,11 @@ var GameState = {
 
 	},
 	update: function(){
+		// rotate players icons
 		this.player1.angle += player_rotation_speed;
 		this.player2.angle += player_rotation_speed;
 
-		//createObstacle();
-		//game.physics.arcade.overlap(this.player1, obstacles, collisionHandler);
-
+		// scroll the background
 		this.background.tilePosition.y += 3;
 
 		// move players by pressing the keys
