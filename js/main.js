@@ -2,6 +2,7 @@ var rez_x = window.innerWidth - 20;
 var rez_y = window.innerHeight - 20;
 var players_speed = 10;
 var player_rotation_speed = 0;
+var obstacle_rotation_speed = 3;
 var game = new Phaser.Game(rez_x, rez_y, Phaser.AUTO);
 result = "Started game";
 
@@ -38,6 +39,18 @@ var GameState = {
 
 		game.physics.enable(this.player1, Phaser.Physics.ARCADE);
 		game.physics.enable(this.player2, Phaser.Physics.ARCADE);
+
+		// Create obstacles group
+		this.obstacles = game.add.group();
+		this.obstacles.enableBody = true;
+		this.obstacles.physicsBodyType = Phaser.Physics.ARCADE;
+		
+		//Put obstacles in the game
+		this.obstacle = this.obstacles.create(this.game.world.centerX*1.5, this.game.world.centerY*0.5, 'obstacle');
+		this.obstacle.anchor.setTo(0.5);
+		this.obstacle.scale.setTo(1, 0.5);
+		this.obstacle_animation = game.add.tween(this.obstacles);
+		this.obstacle_animation.to({y:10000, }, 100000, Phaser.Easing.Linear.None, true, 0, 1000, true);
 	},
 	update: function(){
 		// rotate players icons
@@ -59,12 +72,18 @@ var GameState = {
 		// enable special functions if in 
 		// contact with the middle wall
 		middleCollisionHandler(this.player1, this.player2, this.middle);
+
+		descend_obstacle(this.obstacle);
 	},
 	render: function(){
 		this.player1._text.text = this.player1._reset_time;
 		this.player2._text.text = this.player2._reset_time;
 	}
 };
+
+function descend_obstacle(obstacle){
+	obstacle.angle += obstacle_rotation_speed;
+}
 
 game.state.add('GameState', GameState);
 game.state.start('GameState');
