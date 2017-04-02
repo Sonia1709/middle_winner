@@ -37,16 +37,15 @@ function middleCollisionHandler(player1, player2, middle){
 function decreaseTimer(player){
 	player._reset_time--;
 }
-function createObstacle(){
-	var obstacle = obstacles.getFirstExists(false);
-	if (obstacle){
-		obstacle.reset(500, 500);
-	}
-}
 
-function collisionHandler(player, object){
-	player.position.y = 1100;
-	object.position.y = 2000;
+function outofBoundsKill(obstacle){
+	if(obstacle.alive){
+		if(obstacle.y  > game.world.height + obstacle.height+ obstacle.width){
+			obstacle.kill();
+			//obstacle._killed = true;
+			console.log(obstacle);
+		}
+	}
 }
 
 function outOfBoundsBlock(player){
