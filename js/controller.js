@@ -1,6 +1,12 @@
 function middleCollisionHandler(player, middle){
 	player.sprite._text.text = "This player hit the middle";
-	console.log("ASD");
+	if(player.sprite.key == "player1"){
+		this.player2.body.x = 0;
+	}
+
+	if(player.sprite.key == "player2"){
+		this.player1.body.x = game.world.width;
+	}
 }
 
 function decreaseTimer(player){

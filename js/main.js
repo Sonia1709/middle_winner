@@ -26,23 +26,30 @@ var GameState = {
 	},
 	create: function(){
 		game.physics.startSystem(Phaser.Physics.P2JS);
+		game.physics.p2.updateBoundsCollisionGroup();
 
 		this.background = this.game.add.tileSprite(0, 0, 0, 0, 'background');
 		this.background.width = this.game.width;
 		this.background.height = this.game.height;
 		this.background.tileScale.set(0.6, 0.6);
 
-		this.middle = create_middle_bound();
+		this.middleCollisionGroup = game.physics.p2.createCollisionGroup();
+		this.playerCollisionGroup = game.physics.p2.createCollisionGroup();
+		this.obstacleCollisionGroup = game.physics.p2.createCollisionGroup();
 
-		this.player1 = create_player1(this.middle);
-		this.player2 = create_player2(this.middle);
+		this.middle = create_middle_bound(this.middleCollisionGroup, this.playerCollisionGroup);
+
+		this.player1 = create_player1(this.middle, this.middleCollisionGroup, this.playerCollisionGroup, this.obstacleCollisionGroup);
+		this.player2 = create_player2(this.middle, this.middleCollisionGroup, this.playerCollisionGroup, this.obstacleCollisionGroup);
 		
 		game.physics.p2.setImpactEvents(true);
+
 		// Create obstacles group
 		this.obstacles = create_obstacles_group();
 		
 		//Put obstacles in the game
-		//this.obstacle = add_obstacle(this.obstacles, this.player1);
+		this.obstacle = add_obstacle(this.obstacles, this.player1, this.playerCollisionGroup, this.obstacleCollisionGroup);
+		this.obstacle.body.collides(this.player1, obstacleCollisionHandler, this);
 
 	},
 	update: function(){
@@ -53,20 +60,14 @@ var GameState = {
 		playerKeyPressHandler(this.player1, this.player1_keys);
 		playerKeyPressHandler(this.player2, this.player2_keys);
 
-		// enable special functions if in 
-		// contact with the middle wall
-		//middleCollisionHandler(this.player1, this.player2, this.middle);
-
 		descend_obstacle(this.obstacle);
-		//obstacleCollisionHandler(this.obstacle, player1);
 		outofBoundsKill(this.obstacle);
-		//game.physics.arcade.collide(this.obstacle, this.player1, obstacleCollisionHandler, null, this);
 	},
 	render: function(){
 		this.player1._text.text = this.player1._reset_time;
 		this.player2._text.text = this.player2._reset_time;
 		//game.debug.text(this.middle.position.x, 32, 32);
-		game.debug.text(this.player1.x, 32, 64);
+		//game.debug.text(this.player1.x, 32, 64);
 	}
 };
 
