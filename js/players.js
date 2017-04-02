@@ -8,6 +8,8 @@ function create_player1(middle){
 	player1._reset_time = 0;
 	player1._text = game.add.bitmapText(this.game.world.centerX + middle.height, 10, 'carrier_command', player1._reset_time,16);
 
+	game.physics.enable(player1, Phaser.Physics.ARCADE);
+	player1.enableBody = true;
 	return player1;
 }
 

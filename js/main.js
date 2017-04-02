@@ -40,6 +40,8 @@ var GameState = {
 		game.physics.enable(this.player1, Phaser.Physics.ARCADE);
 		game.physics.enable(this.player2, Phaser.Physics.ARCADE);
 
+		//this.player1.physicsBodyType = Phaser.Physics.ARCADE;
+
 		// Create obstacles group
 		this.obstacles = game.add.group();
 		this.obstacles.enableBody = true;
@@ -51,6 +53,11 @@ var GameState = {
 		this.obstacle.scale.setTo(1, 0.5);
 		this.obstacle_animation = game.add.tween(this.obstacles);
 		this.obstacle_animation.to({y:10000, }, 100000, Phaser.Easing.Linear.None, true, 0, 1000, true);
+
+		
+
+
+
 	},
 	update: function(){
 		// rotate players icons
@@ -74,6 +81,10 @@ var GameState = {
 		middleCollisionHandler(this.player1, this.player2, this.middle);
 
 		descend_obstacle(this.obstacle);
+
+		//game.physics.arcade.collide(this.obstacle, this.player1, obstacleCollisionHandler, function(){console.log('tried'); return true;}, this);
+		game.physics.arcade.collide(this.obstacles, this.player1, obstacleCollisionHandler, function(){console.log('tried'); return true;}, this);
+		//game.physics.arcade.collide(this.obstacle_animation, this.player1, obstacleCollisionHandler, function(){console.log('tried'); return true;}, this);
 	},
 	render: function(){
 		this.player1._text.text = this.player1._reset_time;
@@ -83,6 +94,12 @@ var GameState = {
 
 function descend_obstacle(obstacle){
 	obstacle.angle += obstacle_rotation_speed;
+}
+
+function obstacleCollisionHandler(player, obstacle){
+	console.log(player);
+	game.debug.text(player.key + " lost!", 32, 32);
+	console.log("Touched");
 }
 
 game.state.add('GameState', GameState);
