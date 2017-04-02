@@ -1,14 +1,21 @@
 function add_obstacle(obstacles_group, player, playerCollisionGroup, obstacleCollisionGroup){
-	obstacle = obstacles_group.create(game.world.centerX*1.5, game.world.centerY*0.5, 'obstacle');
-	obstacle.anchor.setTo(0.5);
-	obstacle.scale.setTo(1, 0.5);
+	var obstacle = null;
+	var now = (new Date()).getTime();
+	console.log(obstacles_group.children.length);
+	if(player._last_created == null || now - player._last_created >= obstacle_creation_time * 1000){
+		player._last_created = (new Date()).getTime();
 
-	game.physics.p2.enable(obstacle);
-	obstacle.body.createBodyCallback(player, obstacleCollisionHandler, this);
-	obstacle.body.collideWorldBounds = false;
+		obstacle = obstacles_group.getFirstDead(true, player.body.x, -10, 'obstacle');
+		obstacle.anchor.setTo(0.5);
+		obstacle.scale.setTo(1, 0.5);
 
-	obstacle.body.setCollisionGroup(obstacleCollisionGroup);
-	obstacle.body.collides(playerCollisionGroup);
+		game.physics.p2.enable(obstacle);
+		obstacle.body.createBodyCallback(player, obstacleCollisionHandler, this);
+		obstacle.body.collideWorldBounds = false;
+
+		obstacle.body.setCollisionGroup(obstacleCollisionGroup);
+		obstacle.body.collides(playerCollisionGroup);
+	}
 	return obstacle;
 }
 
@@ -21,20 +28,8 @@ function create_obstacles_group(){
 function descend_obstacle(obstacle){
 	if(obstacle){
 		obstacle.body.angle += obstacle_rotation_speed;
-		obstacle.body.y += 1;
+		obstacle.body.y += obstacle_speed;
 	}
-}
-
-function obstacleCollisionHandler(player, obstacle){
-	if(collided_with_obstacle(obstacle, player)){
-		console.log(player);
-		game.debug.text(player.sprite.key + " lost!", 32, 32);
-		console.log("Touched");
-	}
-}
-
-function collided_with_obstacle(obstacle, player){
-	return true;
 }
 
 function create_middle_bound(middleCollisionGroup, playerCollisionGroup){

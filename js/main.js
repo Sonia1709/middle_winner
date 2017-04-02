@@ -6,10 +6,11 @@ var game = new Phaser.Game(rez_x, rez_y, Phaser.AUTO);
 var players_speed = 400;
 var default_reset_time = 3;
 
-var obstacle_rotation_speed = 3;
+var obstacle_speed = 1;
+var obstacle_rotation_speed = 2;
+var obstacle_creation_time = 3; //seconds
 
 var background_scroll_speed = 3;
-
 result = "Started game";
 var text_style = { font: "65px Arial", fill: "#ff0044", align: "center" };
 
@@ -47,10 +48,6 @@ var GameState = {
 		// Create obstacles group
 		this.obstacles = create_obstacles_group();
 		
-		//Put obstacles in the game
-		this.obstacle = add_obstacle(this.obstacles, this.player1, this.playerCollisionGroup, this.obstacleCollisionGroup);
-		this.obstacle.body.collides(this.player1, obstacleCollisionHandler, this);
-
 	},
 	update: function(){
 		// scroll the background
@@ -60,12 +57,18 @@ var GameState = {
 		playerKeyPressHandler(this.player1, this.player1_keys);
 		playerKeyPressHandler(this.player2, this.player2_keys);
 
-		descend_obstacle(this.obstacle);
-		outofBoundsKill(this.obstacle);
+
+		//Put obstacles in the game
+		obstacle1 = add_obstacle(this.obstacles, this.player1, this.playerCollisionGroup, this.obstacleCollisionGroup);
+		obstacle2 = add_obstacle(this.obstacles, this.player2, this.playerCollisionGroup, this.obstacleCollisionGroup);
+		for (let obstacle of this.obstacles.children){
+			descend_obstacle(obstacle);
+			outofBoundsKill(obstacle);
+		}
 	},
 	render: function(){
-		this.player1._text.text = this.player1._reset_time;
-		this.player2._text.text = this.player2._reset_time;
+		// this.player1._text.text = this.player1._reset_time;
+		// this.player2._text.text = this.player2._reset_time;
 		//game.debug.text(this.middle.position.x, 32, 32);
 		//game.debug.text(this.player1.x, 32, 64);
 	}
