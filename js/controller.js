@@ -2,9 +2,11 @@ function obstacleCollisionHandler(item1, item2){
 	//game.debug.text(player.sprite.key + " lost!", 120, 100);
 	if(item1.sprite.key == 'player1'){
 		item1.sprite._text.text = "This player lost";
+		item1.sprite._lost = true;
 	}
 	else if(item2.sprite.key == 'player2'){
-		item2.sprite._text.text = "This player lost";	
+		item2.sprite._text.text = "This player lost";
+		item2.sprite._lost = true;
 	}
 }
 

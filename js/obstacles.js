@@ -1,7 +1,7 @@
 function add_obstacle(obstacles_group, player, playerCollisionGroup, obstacleCollisionGroup){
 	var obstacle = null;
 	var now = (new Date()).getTime();
-	console.log(obstacles_group.children.length);
+	//console.log(obstacles_group.children.length);
 	if(player._last_created == null || now - player._last_created >= obstacle_creation_time * 1000){
 		player._last_created = (new Date()).getTime();
 
