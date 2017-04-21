@@ -7,6 +7,7 @@ function create_player1(middle, middleCollisionGroup, playerCollisionGroup, obst
 
 	player1._reset_time = 0;
 	player1._text = game.add.bitmapText(this.game.world.centerX + middle.height, 10, 'carrier_command', player1._reset_time,16);
+	player1._text.text = 0;
 	player1._lost = false;
 	
 	game.physics.p2.enable(player1);
@@ -31,6 +32,7 @@ function create_player2(middle, middleCollisionGroup, playerCollisionGroup, obst
 															);
 	player2._reset_time = 0;
 	player2._text = game.add.bitmapText(10, 10, 'carrier_command', player2._reset_time,16);
+	player2._text.text = "0";
 	player2._lost = false;
 
 	game.physics.p2.enable(player2);

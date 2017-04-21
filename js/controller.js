@@ -8,6 +8,7 @@ function obstacleCollisionHandler(item1, item2){
 		item2.sprite._text.text = "This player lost";
 		item2.sprite._lost = true;
 	}
+	setTimeout(function(){this.game.state.start('MenuState')}, lose_timeout);
 }
 
 function middleCollisionHandler(player, middle){
@@ -25,10 +26,31 @@ function decreaseTimer(player){
 	player._reset_time--;
 }
 
+function incrementScore(player){
+	try{
+		var score = parseInt(player._text.text) + 100;
+		if(isNaN(score)){
+			throw Error("Player already lost :(")
+		}
+		player._text.text = score.toString();
+	}
+	catch(err){
+		console.log(player.key + ": " + err)
+	}
+}
+
 function outofBoundsKill(obstacle){
 	if(obstacle && obstacle.alive){
 		if(obstacle.y  > game.world.height + obstacle.height+ obstacle.width){
 			obstacle.kill();
+
+			// reward the player with points
+			if(obstacle.x > game.world.centerX){
+				incrementScore(this.player1);
+			}
+			else if(obstacle.x < game.world.centerX){
+				incrementScore(this.player2);
+			}
 		}
 	}
 }
