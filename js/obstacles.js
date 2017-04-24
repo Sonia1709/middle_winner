@@ -15,6 +15,8 @@ function add_obstacle(obstacles_group, player, playerCollisionGroup, obstacleCol
 
 		obstacle.body.setCollisionGroup(obstacleCollisionGroup);
 		obstacle.body.collides(playerCollisionGroup);
+		
+		obstacle._origin = player.key;
 	}
 	return obstacle;
 }

@@ -18,12 +18,12 @@ var MenuState = {
 		title.anchor.setTo(0.5, 0.5);
 
 		this.createButton("Compete", game.world.centerX, game.world.centerY-32, 200, 100, function(){
-			game_mode = 1;
+			game_mode = "compete";
 			this.game.state.start('GameState');
 		})
 
 		this.createButton("CO-OP", game.world.centerX, game.world.centerY+96, 200, 100, function(){
-			game_mode = 2;
+			game_mode = "co-op";
 			this.game.state.start('GameState');
 		})
 	},
